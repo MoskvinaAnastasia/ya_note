@@ -10,10 +10,12 @@ User = get_user_model()
 
 
 class TestRoutes(TestCase):
+    """Набор тестов для проверки маршрутов адресов заметок."""
 
     @classmethod
     def setUpTestData(cls):
-        cls.author = User.objects.create(username='Коул')
+        """Подготовка данных для тестов."""
+        cls.author = User.objects.create(username='Раст')
         cls.note = Note.objects.create(
             title='Заголовок', text='Текст', author=cls.author
         )
