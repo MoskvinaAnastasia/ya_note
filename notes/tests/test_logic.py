@@ -90,18 +90,17 @@ class TestNoteEditDelete(TestCase):
 
     @classmethod
     def setUpTestData(cls):
+        """Подготовка данных для тестов."""
         cls.author = User.objects.create(username='Марти')
         cls.note = Note.objects.create(
             title=cls.NOTE_TITLE,
             text=cls.NOTE_TEXT,
             author=cls.author
         )
-
         cls.author_client = Client()
         cls.author_client.force_login(cls.author)
         cls.edit_url = reverse('notes:edit', args=(cls.note.slug,))
         cls.delete_url = reverse('notes:delete', args=(cls.note.slug,))
-
         cls.reader = User.objects.create(username='Раст')
         cls.reader_client = Client()
         cls.reader_client.force_login(cls.reader)
