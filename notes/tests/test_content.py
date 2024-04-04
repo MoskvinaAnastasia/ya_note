@@ -30,7 +30,6 @@ class TestNoteContent(TestCase):
             author=cls.reader
         )
         cls.url = reverse('notes:list')
-        cls.add_url = reverse('notes:add', None)
 
     def test_note_is_not_in_object_list_for_another_user(self):
         """
@@ -55,16 +54,33 @@ class TestNoteContent(TestCase):
         object_list = response.context['object_list']
         self.assertIn(self.note_reader, object_list)
 
-    def test_edit_has_form(self):
-        user = self.author
-        self.client.force_login(user)
-        note_from_author = Note.objects.filter(author=self.author).first()
-        url = reverse('notes:edit', args=(note_from_author.slug,))
-        response = self.client.get(url)
-        self.assertIn('form', response.context)
 
-    def test_add_has_form(self):
-        user = self.author
-        self.client.force_login(user)
-        response = self.client.get(self.add_url)
-        self.assertIn('form', response.context)
+class TestNoteForms(TestCase):
+    """Набор тестов для проверки форм создания и редактирования заметок."""
+
+    @classmethod
+    def setUpTestData(cls):
+        """Подготовка данных для тестов."""
+        cls.user = User.objects.create(username='test_user')
+        cls.client = Client()
+        cls.client.force_login(cls.user)
+
+    def test_note_create_form_is_passed_to_create_page(self):
+        """
+        Проверка, что форма создания заметки
+        передается на страницу создания.
+        """
+        response = self.client.get(reverse('notes:add'))
+        self.assertIsInstance(response.context['form'], NoteForm)
+        self.assertEqual(response.status_code, 200)
+
+    def test_note_update_form_is_passed_to_update_page(self):
+        """
+        Проверка, что форма редактирования заметки
+        передается на страницу редактирования.
+        """
+        note = Note.objects.create(
+            title='Test Note', text='Test Text', author=self.user)
+        response = self.client.get(reverse('notes:edit', args=[note.pk]))
+        self.assertIsInstance(response.context['form'], NoteForm)
+        self.assertEqual(response.status_code, 200)
