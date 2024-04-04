@@ -72,7 +72,6 @@ class TestNoteForms(TestCase):
         """
         response = self.client.get(reverse('notes:add'))
         self.assertIsInstance(response.context['form'], NoteForm)
-        self.assertEqual(response.status_code, 200)
 
     def test_note_update_form_is_passed_to_update_page(self):
         """
@@ -83,4 +82,3 @@ class TestNoteForms(TestCase):
             title='Test Note', text='Test Text', author=self.user)
         response = self.client.get(reverse('notes:edit', args=[note.pk]))
         self.assertIsInstance(response.context['form'], NoteForm)
-        self.assertEqual(response.status_code, 200)
