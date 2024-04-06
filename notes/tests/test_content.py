@@ -61,16 +61,16 @@ class TestNoteForms(TestCase):
     @classmethod
     def setUpTestData(cls):
         """Подготовка данных для тестов."""
-        cls.user = User.objects.create(username='test_user')
-        cls.client = Client()
-        cls.client.force_login(cls.user)
+        cls.user = User.objects.create(username='Spider-man')
+        cls.user_client = Client()
+        cls.user_client.force_login(cls.user)
 
     def test_note_create_form_is_passed_to_create_page(self):
         """
         Проверка, что форма создания заметки
         передается на страницу создания.
         """
-        response = self.client.get(reverse('notes:add'))
+        response = self.user_client.get(reverse('notes:add'))
         self.assertIsInstance(response.context['form'], NoteForm)
 
     def test_note_update_form_is_passed_to_update_page(self):
@@ -79,6 +79,9 @@ class TestNoteForms(TestCase):
         передается на страницу редактирования.
         """
         note = Note.objects.create(
-            title='Test Note', text='Test Text', author=self.user)
-        response = self.client.get(reverse('notes:edit', args=[note.pk]))
+            title='Fighting Otto Octaviuse',
+            text='More tentacles',
+            author=self.user)
+        response = self.user_client.get(
+            reverse('notes:edit', args=[note.slug]))
         self.assertIsInstance(response.context['form'], NoteForm)
