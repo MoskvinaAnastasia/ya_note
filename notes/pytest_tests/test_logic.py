@@ -1,18 +1,13 @@
-# test_logic.py
-from pytest_django.asserts import assertRedirects
-
-from django.urls import reverse
 from http import HTTPStatus
-from notes.models import Note
+
 import pytest
-
-# Импортируем функции для проверки редиректа и ошибки формы:
-from pytest_django.asserts import assertRedirects, assertFormError
-
-# Импортируем из модуля forms сообщение об ошибке:
+from django.urls import reverse
+from notes.models import Note
 from notes.forms import WARNING
-
 from pytils.translit import slugify
+
+# Импорты для проверки редиректа и ошибки формы
+from pytest_django.asserts import assertRedirects, assertFormError
 
 
 # Указываем фикстуру form_data в параметрах теста.
